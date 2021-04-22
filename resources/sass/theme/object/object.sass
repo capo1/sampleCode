@@ -1,0 +1,25 @@
+.two-columns
+   @include breakpoint__md
+      column-count: 2
+.object-container
+   margin-bottom: calc(3em - 1.5rem);
+.person_contact
+   padding: 10px
+   margin-bottom: 10px
+   border-left: 2px solid $secondColor
+   @include breakpoint__lg--max
+      word-break: break-word
+
+.object-image
+   max-height: 30rem
+
+.list-object
+   @include breakpoint__md
+      justify-content: flex-end
+   .post-title
+      margin-bottom: .5em!important
+   .post-content
+      margin-bottom: 1em!important
+   p
+      br
+         display: block!important

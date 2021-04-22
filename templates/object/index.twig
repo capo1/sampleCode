@@ -1,0 +1,141 @@
+{% extends "base.twig" %}
+{% block title %}{{ page_title }} - {% endblock %}
+
+{% block content %}
+
+  <section class="container portfolio-container">
+    <div class="row">
+      <div class="col-xs-12 text-right-md p-0">
+        <h1>{{ page_title | _orphan }}
+        </h1>
+      </div>
+    </div>
+    <div class="row portfolio-list list-object">
+      {% for item in object_posts %}
+        {% include 'partials/blog/objectItem.twig' with {'item': item,'noCol': 'col-xs-12 col-sm-6 col-md-4', 'size':'medium'} %}
+      {% endfor %}
+    </div>
+
+    <div class="row portfolio-address">
+      {% if contact != null %}
+        <div class="col-md-3 col-xs-12">
+          <h2>{{ __('Dział komercjalizacji', 'hossabiz') }}</h2>
+          {% for person in contact %}
+          {% include 'partials/department_person.twig' with {'person': person} %}
+        {% endfor %}
+        </div>
+      {% endif %}
+      {% if markers != null %}
+
+        <div class="col-md-9 col-xs-12 portfolio-map text-right pl-md-5">
+          <h2 class="text-right-md h2">
+            {{ __('Lokalizacja', 'hossabiz') }}
+          </h2>
+          <div class="leaflet-map" data-height="400" data-map="leaflet" data-map-lng="{{center_map[1]}}" data-map-lat="{{center_map[0]}}" data-map-zoom="10" data-map-markers="{{markers|json_encode|e('html_attr')}}" data-map-layers="[&quot;OpenStreetMap.Mapnik&quot;]"></div>
+        </div>
+      {% endif %}
+    </div>
+  </section>
+  <br/>
+  <script>
+/* <![CDATA[ */
+var acf_osm = {
+    "options": {
+        "layer_config": [],
+        "marker": {
+            "html": false,
+            "className": "acf-osm-marker-icon",
+            "icon": false
+        }
+    },
+    "providers": {
+        "OpenStreetMap": {
+            "url": "https:\/\/{s}.tile.openstreetmap.org\/{z}\/{x}\/{y}.png",
+            "options": {
+                "maxZoom": 19,
+                "attribution": "&copy; <a href=\"https:\/\/www.openstreetmap.org\/copyright\">OpenStreetMap<\/a> contributors"
+            },
+            "variants": {
+                "Mapnik": [],
+                "DE": {
+                    "url": "https:\/\/{s}.tile.openstreetmap.de\/tiles\/osmde\/{z}\/{x}\/{y}.png",
+                    "options": {
+                        "maxZoom": 18
+                    }
+                },
+                "CH": {
+                    "url": "https:\/\/tile.osm.ch\/switzerland\/{z}\/{x}\/{y}.png",
+                    "options": {
+                        "maxZoom": 18,
+                        "bounds": [
+                            [45, 5],
+                            [48, 11]
+                        ]
+                    }
+                },
+                "France": {
+                    "url": "https:\/\/{s}.tile.openstreetmap.fr\/osmfr\/{z}\/{x}\/{y}.png",
+                    "options": {
+                        "maxZoom": 20,
+                        "attribution": "&copy; Openstreetmap France | {attribution.OpenStreetMap}"
+                    }
+                },
+                "HOT": {
+                    "url": "https:\/\/{s}.tile.openstreetmap.fr\/hot\/{z}\/{x}\/{y}.png",
+                    "options": {
+                        "attribution": "{attribution.OpenStreetMap}, Tiles style by <a href=\"https:\/\/www.hotosm.org\/\" target=\"_blank\">Humanitarian OpenStreetMap Team<\/a> hosted by <a href=\"https:\/\/openstreetmap.fr\/\" target=\"_blank\">OpenStreetMap France<\/a>"
+                    }
+                },
+                "BZH": {
+                    "url": "https:\/\/tile.openstreetmap.bzh\/br\/{z}\/{x}\/{y}.png",
+                    "options": {
+                        "attribution": "{attribution.OpenStreetMap}, Tiles courtesy of <a href=\"http:\/\/www.openstreetmap.bzh\/\" target=\"_blank\">Breton OpenStreetMap Team<\/a>",
+                        "bounds": [
+                            [46.2, -5.5],
+                            [50, 0.7]
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
+/* ]]> */
+  </script>
+{% endblock %}
+
+{% block script %}
+<link rel="stylesheet" id="leaflet-css" href="{{plugin_url}}/acf-openstreetmap-field/assets/css/leaflet.min.css?ver=1.3.1" type="text/css" media="all">
+<script type="text/javascript" src="{{ plugin_url }}/acf-openstreetmap-field/assets/js/acf-osm-frontend.min.js?ver=1.3.1" id="acf-osm-frontend-js"></script>
+<script>
+    var acf_osm = []
+$(function () {
+if (window.innerWidth > 400) {
+$('.leaflet-map').css('height', Math.max($('.portfolio-address .col-xs-12').height(), 300) + 'px');
+window.dispatchEvent(new Event("resize"));
+}
+})
+</script>
+{% endblock %}
+
+{% block structuredData %}
+    <script type="application/ld+json">
+      {
+      "@context":"https://schema.org",
+      "@type":"ItemList",
+      "itemListElement":[
+        {% for item in object_posts %}
+        {
+          "image":["{{ item.thumbnail.src('small') }}"],
+          "@type":"ListItem",
+          "name":"{{ item.title }}",
+          "position":{{ loop.index }},
+          "url": "{{ item.link }}"
+        }
+        {% if loop.last == false %},{% endif %}
+        {% endfor %}
+      ]
+    }
+    </script>
+{% endblock %}
+
