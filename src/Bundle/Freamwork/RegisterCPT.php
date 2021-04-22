@@ -68,4 +68,28 @@ class RegisterCPT implements RegisterInterface
 
         return str_replace('%category%',  $post_terms, $permalink);
     }
+
+    function addObjectCategory()
+    {
+        $labels = array(
+            'name'              => _x('Kategorie Obiektów', 'taxonomy general name'),
+            'singular_name'     => _x('Kategorie Obiektów', 'taxonomy singular name'),
+            'search_items'      => __('Przeszukaj kategorie'),
+            'all_items'         => __('Wszystkie kategorie'),
+            'parent_item'       => __('Rodzic kategorii'),
+            'parent_item_colon' => __('Rodzic kategorii:'),
+            'edit_item'         => __('Edytuj kategorię'),
+            'update_item'       => __('Aktualizuj kategorię'),
+            'add_new_item'      => __('Dodaj kategorię'),
+            'new_item_name'     => __('Dodaj kategorię'),
+            'menu_name'         => __('Kategorie Obiektów'),
+        );
+        $args = array(
+            'labels' => $labels,
+            'hierarchical' => true,
+            'show_in_nav_menus' => true,
+        );
+
+        register_taxonomy('object_category', 'object', $args);
+    }
 }
