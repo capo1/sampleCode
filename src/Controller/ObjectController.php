@@ -78,6 +78,7 @@ class ObjectController extends AbstractController
 
         $context['contact'] = [];
         $kontakt = get_field('kontakt');
+        
         foreach ($kontakt as $item) :
             $context['contact'][] = get_fields($item);
         endforeach;
@@ -133,4 +134,3 @@ class ObjectController extends AbstractController
         return [$centerlat, $centerlon];
     }
 }
-?>
